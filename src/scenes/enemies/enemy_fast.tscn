@@ -1,0 +1,33 @@
+[gd_scene load_steps=2 format=3 uid="uid://c2enemy_fast"]
+
+[ext_resource type="Script" path="res://src/entities/enemies/enemy_fast.gd" id="1_script"]
+
+[node name="EnemyFast" type="Area2D"]
+collision_layer = 2
+collision_mask = 4
+script = ExtResource("1_script")
+max_health = 50
+entity_color = Color(1, 1, 0, 1)
+entity_size = Vector2(20, 20)
+move_speed = 160.0
+gold_reward = 15
+
+[node name="Visual" type="ColorRect" parent="."]
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+
+[node name="HealthBar" type="ColorRect" parent="."]
+offset_left = -10.0
+offset_top = -18.0
+offset_right = 10.0
+offset_bottom = -14.0
+color = Color(0.545098, 0, 0, 1)
+
+[node name="Fill" type="ColorRect" parent="HealthBar"]
+offset_right = 20.0
+offset_bottom = 4.0
+color = Color(0, 0.501961, 0, 1)

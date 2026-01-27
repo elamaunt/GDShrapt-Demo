@@ -1,0 +1,142 @@
+[gd_scene load_steps=6 format=3 uid="uid://c2scene_game"]
+
+[ext_resource type="Script" path="res://src/ui/game_controller.gd" id="1_controller"]
+[ext_resource type="Script" path="res://src/systems/enemy_spawner.gd" id="2_spawner"]
+[ext_resource type="Script" path="res://src/systems/tower_placer.gd" id="3_placer"]
+[ext_resource type="Script" path="res://src/ui/hud.gd" id="4_hud"]
+
+[sub_resource type="Curve2D" id="Curve2D_path"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 0, 360, 0, 0, 0, 0, 200, 360, 0, 0, 0, 0, 200, 200, 0, 0, 0, 0, 500, 200, 0, 0, 0, 0, 500, 500, 0, 0, 0, 0, 800, 500, 0, 0, 0, 0, 800, 300, 0, 0, 0, 0, 1100, 300, 0, 0, 0, 0, 1100, 360, 0, 0, 0, 0, 1280, 360)
+}
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_controller")
+
+[node name="Background" type="ColorRect" parent="."]
+offset_right = 1280.0
+offset_bottom = 720.0
+color = Color(0.2, 0.25, 0.2, 1)
+
+[node name="BuildArea" type="ColorRect" parent="."]
+offset_left = 100.0
+offset_top = 100.0
+offset_right = 1180.0
+offset_bottom = 620.0
+color = Color(0.25, 0.3, 0.25, 1)
+
+[node name="PathVisual" type="Line2D" parent="."]
+points = PackedVector2Array(0, 360, 200, 360, 200, 200, 500, 200, 500, 500, 800, 500, 800, 300, 1100, 300, 1100, 360, 1280, 360)
+width = 40.0
+default_color = Color(0.35, 0.3, 0.25, 1)
+
+[node name="EnemyPath" type="Path2D" parent="."]
+curve = SubResource("Curve2D_path")
+
+[node name="EnemySpawner" type="Node" parent="."]
+script = ExtResource("2_spawner")
+
+[node name="SpawnTimer" type="Timer" parent="EnemySpawner"]
+
+[node name="TowerPlacer" type="Node2D" parent="."]
+script = ExtResource("3_placer")
+build_area = Rect2(100, 100, 1080, 520)
+grid_size = Vector2(64, 64)
+
+[node name="HUD" type="CanvasLayer" parent="."]
+script = ExtResource("4_hud")
+
+[node name="TopBar" type="HBoxContainer" parent="HUD"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 20.0
+offset_top = 10.0
+offset_right = -20.0
+offset_bottom = 50.0
+grow_horizontal = 2
+theme_override_constants/separation = 40
+
+[node name="GoldLabel" type="Label" parent="HUD/TopBar"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Gold: 150"
+
+[node name="HealthLabel" type="Label" parent="HUD/TopBar"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Health: 20/20"
+
+[node name="WaveLabel" type="Label" parent="HUD/TopBar"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Wave: 1/10"
+
+[node name="BottomBar" type="HBoxContainer" parent="HUD"]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = -80.0
+offset_right = -20.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 20
+
+[node name="TowerContainer" type="HBoxContainer" parent="HUD/BottomBar"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="StartWaveButton" type="Button" parent="HUD/BottomBar"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Start Wave 1"
+
+[node name="GameOverPanel" type="Panel" parent="HUD"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -150.0
+offset_right = 200.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="HUD/GameOverPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="HUD/GameOverPanel/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "GAME OVER"
+horizontal_alignment = 1
+
+[node name="MessageLabel" type="Label" parent="HUD/GameOverPanel/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "The enemies broke through!"
+horizontal_alignment = 1
+
+[node name="RestartButton" type="Button" parent="HUD/GameOverPanel/VBox"]
+layout_mode = 2
+text = "Restart"
+
+[node name="MenuButton" type="Button" parent="HUD/GameOverPanel/VBox"]
+layout_mode = 2
+text = "Main Menu"

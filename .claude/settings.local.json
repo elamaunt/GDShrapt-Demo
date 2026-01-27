@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C \"g:/Coding/Projects/elamaunt/GDShrapt-Demo\" log --oneline -10)",
+      "Bash(git -C \"g:/Coding/Projects/elamaunt/GDShrapt-Demo\" config --list)",
+      "Bash(git -C \"g:/Coding/Projects/elamaunt/GDShrapt-Demo\" remote:*)"
+    ]
+  }
+}
