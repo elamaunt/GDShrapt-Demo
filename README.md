@@ -81,17 +81,19 @@ The demo intentionally mixes multiple styles found in production code:
 | Pattern | Example Files |
 |---------|---------------|
 | **Strict typing** | `enemy_basic.gd`, `tower_basic.gd`, `game_manager.gd` |
-| **Duck typing** | `enemy_fast.gd`, `tower_aoe.gd`, `damageable.gd` |
+| **Duck typing** | `enemy_fast.gd`, `tower_aoe.gd`, `damageable.gd`, `damage_zone.gd` |
 | **Dynamic typing (Variant)** | `enemy_tank.gd`, `tower_placer.gd` |
-| **Signals** | `events.gd`, `enemy_base.gd`, `tower_base.gd` |
+| **Type inference (`:=`)** | `tower_sniper.gd` |
+| **Signals** | `events.gd`, `enemy_base.gd`, `tower_base.gd`, `tower_button.gd` |
 | **preload/load** | `enemy_spawner.gd`, `tower_placer.gd` |
 | **Scene instancing** | `enemy_spawner.gd`, `tower_placer.gd` |
 | **Class inheritance** | `entity.gd → enemy_base.gd → enemy_*.gd` |
 | **@export variables** | `entity.gd`, `tower_base.gd`, `enemy_base.gd` |
 | **Enums and constants** | `constants.gd` |
 | **Lifecycle methods** | `_ready`, `_process`, `_physics_process` |
-| **Physics and collisions** | `tower_base.gd`, `projectile_base.gd` |
-| **Arrays and dictionaries** | `enemy_spawner.gd`, `constants.gd` |
+| **Physics and collisions** | `tower_base.gd`, `projectile_base.gd`, `projectile_aoe.gd` |
+| **Arrays and dictionaries** | `enemy_spawner.gd`, `constants.gd`, `damage_zone.gd` |
+| **UI and scene management** | `hud.gd`, `game_controller.gd`, `main_menu.gd` |
 
 ---
 
