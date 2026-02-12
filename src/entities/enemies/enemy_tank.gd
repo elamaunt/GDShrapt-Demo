@@ -65,7 +65,7 @@ func _regenerate_shield() -> void:
 		shield = mini(shield + shield_regen_rate, max_shield)
 
 
-func take_damage(amount: int) -> void:
+func take_damage(amount: int = 1) -> void:
 	var final_damage: int = _apply_damage_reduction(amount)
 	final_damage = _apply_shield(final_damage)
 
@@ -164,3 +164,14 @@ func _ability_heal() -> void:
 
 func _ability_shield_burst() -> void:
 	shield = max_shield * 2
+
+
+func apply_poison(duration: float = 5.0) -> void:
+	var poison_timer = get_node_or_null("PoisonTimer")
+	if poison_timer:
+		poison_timer.wait_time = 1.0
+		poison_timer.timeout.connect(take_damage)
+		poison_timer.start()
+		get_tree().create_timer(duration).timeout.connect(
+			func(): if is_instance_valid(self) and poison_timer: poison_timer.stop()
+		)

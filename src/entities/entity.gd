@@ -51,7 +51,7 @@ func _setup_collision() -> void:
 
 # === Public Methods (interface for Damageable) ===
 
-func take_damage(amount: int) -> void:
+func take_damage(amount: int = 1) -> void:
 	_current_health -= amount
 	_on_damaged(amount)
 

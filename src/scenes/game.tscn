@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://c2scene_game"]
+[gd_scene load_steps=7 format=3 uid="uid://c2scene_game"]
 
 [ext_resource type="Script" path="res://src/ui/game_controller.gd" id="1_controller"]
 [ext_resource type="Script" path="res://src/systems/enemy_spawner.gd" id="2_spawner"]
 [ext_resource type="Script" path="res://src/systems/tower_placer.gd" id="3_placer"]
 [ext_resource type="Script" path="res://src/ui/hud.gd" id="4_hud"]
+[ext_resource type="PackedScene" path="res://src/scenes/systems/damage_zone.tscn" id="5_damage_zone"]
 
 [sub_resource type="Curve2D" id="Curve2D_path"]
 _data = {
@@ -29,6 +30,12 @@ color = Color(0.25, 0.3, 0.25, 1)
 points = PackedVector2Array(0, 360, 200, 360, 200, 200, 500, 200, 500, 500, 800, 500, 800, 300, 1100, 300, 1100, 360, 1280, 360)
 width = 40.0
 default_color = Color(0.35, 0.3, 0.25, 1)
+
+[node name="DamageZone" parent="." instance=ExtResource("5_damage_zone")]
+position = Vector2(500, 200)
+damage_per_tick = 5
+zone_size = Vector2(100, 100)
+zone_color = Color(1, 0.2, 0, 0.3)
 
 [node name="EnemyPath" type="Path2D" parent="."]
 curve = SubResource("Curve2D_path")

@@ -31,3 +31,9 @@ color = Color(0.545098, 0, 0, 1)
 offset_right = 40.0
 offset_bottom = 4.0
 color = Color(0, 0.501961, 0, 1)
+
+[node name="PoisonTimer" type="Timer" parent="."]
+wait_time = 1.0
+autostart = false
+
+[connection signal="timeout" from="PoisonTimer" to="." method="take_damage"]

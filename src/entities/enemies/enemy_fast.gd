@@ -34,7 +34,7 @@ func _physics_process(delta):
 
 
 # Method without type annotations
-func take_damage(amount):
+func take_damage(amount = 1):
 	if _try_dodge():
 		_show_dodge_effect()
 		return

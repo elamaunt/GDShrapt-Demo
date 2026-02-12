@@ -39,7 +39,7 @@ func _ready() -> void:
 
 # === Override with Full Typing ===
 
-func take_damage(amount: int) -> void:
+func take_damage(amount: int = 1) -> void:
 	var actual_damage: int = _calculate_damage(amount)
 	super.take_damage(actual_damage)
 	_flash_damage()
