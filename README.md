@@ -1,60 +1,177 @@
 # GDShrapt Tower Defence Demo
 
-A demonstration Tower Defence game project for [GDShrapt](https://github.com/elamaunt/GDShrapt) - a GDScript static analysis platform.
+A real Godot 4 project used to demonstrate **GDShrapt CLI** capabilities:
 
-## Project Purpose
+- safe project-wide rename
+- type-aware cross-file analysis
+- scene + signal refactoring
+- strict vs duck-typed confidence modes
 
-This project demonstrates GDShrapt CLI capabilities through various GDScript patterns found in real Godot game development.
+This is not just a game — it is a **testbed for static analysis**.
 
-## GDScript Patterns
+👉 GDShrapt: https://github.com/elamaunt/GDShrapt
 
-The project intentionally uses different coding styles to test the analyzer:
+---
 
-| Pattern | Example Files |
-|---------|---------------|
-| **Strict typing** | `enemy_basic.gd`, `tower_basic.gd`, `game_manager.gd` |
-| **Duck typing** | `enemy_fast.gd`, `tower_aoe.gd`, `damageable.gd` |
-| **Dynamic typing (Variant)** | `enemy_tank.gd`, `tower_placer.gd` |
-| **Signals** | `events.gd`, `enemy_base.gd`, `tower_base.gd` |
-| **preload/load** | `enemy_spawner.gd` (preload), `tower_placer.gd` (load) |
-| **Scene instancing** | `enemy_spawner.gd`, `tower_placer.gd` |
-| **Class inheritance** | `entity.gd` → `enemy_base.gd` → `enemy_*.gd` |
-| **@export variables** | `entity.gd`, `tower_base.gd`, `enemy_base.gd` |
-| **Enums and constants** | `constants.gd` |
-| **Lifecycle methods** | `_ready`, `_process`, `_physics_process` in all classes |
-| **Physics and collisions** | `tower_base.gd`, `projectile_base.gd` |
-| **Arrays and dictionaries** | `enemy_spawner.gd`, `constants.gd` |
+# Quick start
 
-## Project Structure
+Install GDShrapt CLI (alpha):
+
+```bash
+dotnet tool install -g GDShrapt.CLI --prerelease
+```
+
+Run safe rename:
+
+```bash
+gdshrapt rename take_damage take_damage_renamed -p .
+```
+
+Preview with diff:
+
+```bash
+gdshrapt rename take_damage take_damage_renamed -p . --diff
+```
+
+Apply only **Strict** edits safely:
+
+```bash
+gdshrapt rename take_damage take_damage_renamed -p . --apply
+```
+
+---
+
+# Why this demo exists
+
+Godot projects mix:
+
+- strict typing
+- Variant/dynamic code
+- duck typing (`has_method`)
+- signals and `.tscn` connections
+- inheritance across many files
+
+This makes **safe refactoring extremely hard**.
+
+This demo shows how GDShrapt handles all of it.
+
+---
+
+# Killer feature: safe project-wide rename
+
+Example:
+
+```bash
+gdshrapt rename take_damage take_damage_renamed -p ./GDShrapt-Demo --diff
+```
+
+Result:
+
+- ✅ updates overrides in derived classes  
+- ✅ updates `super.take_damage()` calls  
+- ✅ updates `.tscn` signal connections  
+- ⚠️ flags duck-typed usages separately  
+- ⚠️ isolates name-only heuristic matches  
+
+Confidence levels:
+
+| Level | Meaning |
+|-------|---------|
+Strict | Type-proven symbol reference |
+Potential | Duck-typed call (e.g. `has_method`) |
+Name-match | Text match with unknown type |
+
+Only **Strict edits** are applied by default to prevent breaking dynamic gameplay code.
+
+---
+
+# What this project tests
+
+The code intentionally mixes real-world GDScript patterns:
+
+| Pattern | Purpose |
+|--------|---------|
+Strict typing | type inference and override safety |
+Duck typing | confidence-aware rename |
+Variant usage | flow-sensitive analysis |
+Signals | `.tscn` method rename propagation |
+Inheritance | base → derived method tracking |
+preload/load | resource path analysis |
+Scene instancing | cross-scene symbol usage |
+
+---
+
+# Project structure
 
 ```
 src/
-├── autoload/          # Singletons (Events, GameManager)
-├── core/              # Base classes and constants
-├── entities/          # Game entities
-│   ├── enemies/       # Enemies (3 types)
-│   ├── towers/        # Towers (3 types)
-│   └── projectiles/   # Projectiles
-├── systems/           # Game systems
-├── ui/                # User interface
-└── scenes/            # Scenes (.tscn)
+├── autoload/          # Events, GameManager
+├── core/              # Base classes and interfaces
+├── entities/
+│   ├── enemies/       # Basic, Fast, Tank
+│   ├── towers/        # Basic, Sniper, AOE
+│   └── projectiles/
+├── systems/           # Spawner, Damage zones
+├── ui/
+└── scenes/            # Includes signal connections
 ```
 
-## Gameplay
+---
 
-- Enemies move along a predefined path
-- Player places towers for gold
-- 3 tower types: Basic, Sniper, AOE
-- 3 enemy types: Basic, Fast, Tank
-- 10 waves with increasing difficulty
-- Victory after completing all waves
-- Defeat if enemies destroy the base
+# Running the demo game
 
-## Running
+1. Open in **Godot 4.2+**
+2. Run `src/scenes/main_menu.tscn`
 
-1. Open the project in Godot 4.2+
-2. Run the main scene `src/scenes/main_menu.tscn`
+---
 
-## License
+# Running GDShrapt CLI on this project
 
-MIT License
+Analyze everything:
+
+```bash
+gdshrapt analyze .
+```
+
+Check CI health:
+
+```bash
+gdshrapt check .
+```
+
+Find dead code:
+
+```bash
+gdshrapt dead-code .
+```
+
+Type coverage:
+
+```bash
+gdshrapt type-coverage .
+```
+
+Dependency graph:
+
+```bash
+gdshrapt deps .
+```
+
+---
+
+# Why this matters
+
+Godot’s built-in tooling cannot:
+
+- rename across scenes safely
+- distinguish typed vs duck-typed calls
+- propagate refactors through signals
+- provide confidence levels
+
+GDShrapt adds **language-level refactoring safety** to GDScript.
+
+---
+
+# License
+
+MIT
