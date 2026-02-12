@@ -1,3 +1,9 @@
+<!-- Logo -->
+<p align="center">
+  <img src="./docs/logo.png" alt="GDShrapt logo" width="128" />
+
+<!-- The logo file is expected to be provided in the repository -->
+</p>
 
 # GDShrapt Tower Defence Demo
 
