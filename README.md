@@ -1,177 +1,138 @@
+
 # GDShrapt Tower Defence Demo
 
-A real Godot 4 project used to demonstrate **GDShrapt CLI** capabilities:
+A demonstration Tower Defence game project for [GDShrapt](https://github.com/elamaunt/GDShrapt) — a semantic analysis and refactoring platform for GDScript.
 
-- safe project-wide rename
-- type-aware cross-file analysis
-- scene + signal refactoring
-- strict vs duck-typed confidence modes
-
-This is not just a game — it is a **testbed for static analysis**.
-
-👉 GDShrapt: https://github.com/elamaunt/GDShrapt
+This repository is intentionally designed to showcase **safe project‑wide rename with confidence levels** and other static analysis capabilities on a realistic Godot codebase.
 
 ---
 
-# Quick start
+## What this Demo Shows
 
-Install GDShrapt CLI (alpha):
+This project is used to demonstrate:
 
-```bash
-dotnet tool install -g GDShrapt.CLI --prerelease
-```
-
-Run safe rename:
-
-```bash
-gdshrapt rename take_damage take_damage_renamed -p .
-```
-
-Preview with diff:
-
-```bash
-gdshrapt rename take_damage take_damage_renamed -p . --diff
-```
-
-Apply only **Strict** edits safely:
-
-```bash
-gdshrapt rename take_damage take_damage_renamed -p . --apply
-```
+- Project‑wide rename across:
+  - Inheritance chains
+  - `super` calls
+  - Signal connections in `.tscn`
+  - Duck‑typed call sites (`has_method`, dynamic dispatch)
+- Confidence‑aware classification:
+  - **Strict** (certain, safe to apply)
+  - **Potential** (duck‑typed, preview only)
+  - **Name‑match** (heuristic, preview only)
+- Diff preview before apply
+- Cross‑file semantic resolution
+- Type inference across control flow
 
 ---
 
-# Why this demo exists
-
-Godot projects mix:
-
-- strict typing
-- Variant/dynamic code
-- duck typing (`has_method`)
-- signals and `.tscn` connections
-- inheritance across many files
-
-This makes **safe refactoring extremely hard**.
-
-This demo shows how GDShrapt handles all of it.
-
----
-
-# Killer feature: safe project-wide rename
-
-Example:
+## Example CLI Output
 
 ```bash
 gdshrapt rename take_damage take_damage_renamed -p ./GDShrapt-Demo --diff
 ```
 
-Result:
+![CLI Rename Output](docs/rename-output.png)
 
-- ✅ updates overrides in derived classes  
-- ✅ updates `super.take_damage()` calls  
-- ✅ updates `.tscn` signal connections  
-- ⚠️ flags duck-typed usages separately  
-- ⚠️ isolates name-only heuristic matches  
+### Confidence Model
 
-Confidence levels:
+| Level        | Meaning                                   | Applied in Base |
+|--------------|-------------------------------------------|-----------------|
+| **Strict**   | Proven semantic reference                 | ✅ Yes          |
+| **Potential**| Duck‑typed / `has_method` / dynamic calls | ❌ Preview only |
+| **Name‑match**| Name‑only heuristic                      | ❌ Preview only |
 
-| Level | Meaning |
-|-------|---------|
-Strict | Type-proven symbol reference |
-Potential | Duck-typed call (e.g. `has_method`) |
-Name-match | Text match with unknown type |
-
-Only **Strict edits** are applied by default to prevent breaking dynamic gameplay code.
+This prevents accidental breakage while still surfacing dynamic usages for manual review.
 
 ---
 
-# What this project tests
+## Why This Matters (vs Godot Built‑in Tools)
 
-The code intentionally mixes real-world GDScript patterns:
+Godot’s built‑in rename is **syntax‑based** and limited to local/static contexts.  
+It cannot reliably handle:
 
-| Pattern | Purpose |
-|--------|---------|
-Strict typing | type inference and override safety |
-Duck typing | confidence-aware rename |
-Variant usage | flow-sensitive analysis |
-Signals | `.tscn` method rename propagation |
-Inheritance | base → derived method tracking |
-preload/load | resource path analysis |
-Scene instancing | cross-scene symbol usage |
+- Inheritance overrides across multiple files
+- `.tscn` signal method references
+- Duck‑typed call sites
+- Dynamic dispatch through `has_method`
+- Confidence‑aware preview before applying changes
+
+GDShrapt performs **semantic, project‑wide rename** with a safety model:
+
+- Applies only **provably correct** edits by default
+- Surfaces dynamic usages separately
+- Shows a full diff before any change
+- Works outside the editor (CI‑friendly)
+
+This enables large‑scale refactoring in real Godot projects without breakage.
 
 ---
 
-# Project structure
+## GDScript Patterns Covered
+
+The demo intentionally mixes multiple styles found in production code:
+
+| Pattern | Example Files |
+|---------|---------------|
+| **Strict typing** | `enemy_basic.gd`, `tower_basic.gd`, `game_manager.gd` |
+| **Duck typing** | `enemy_fast.gd`, `tower_aoe.gd`, `damageable.gd` |
+| **Dynamic typing (Variant)** | `enemy_tank.gd`, `tower_placer.gd` |
+| **Signals** | `events.gd`, `enemy_base.gd`, `tower_base.gd` |
+| **preload/load** | `enemy_spawner.gd`, `tower_placer.gd` |
+| **Scene instancing** | `enemy_spawner.gd`, `tower_placer.gd` |
+| **Class inheritance** | `entity.gd → enemy_base.gd → enemy_*.gd` |
+| **@export variables** | `entity.gd`, `tower_base.gd`, `enemy_base.gd` |
+| **Enums and constants** | `constants.gd` |
+| **Lifecycle methods** | `_ready`, `_process`, `_physics_process` |
+| **Physics and collisions** | `tower_base.gd`, `projectile_base.gd` |
+| **Arrays and dictionaries** | `enemy_spawner.gd`, `constants.gd` |
+
+---
+
+## Project Structure
 
 ```
 src/
-├── autoload/          # Events, GameManager
-├── core/              # Base classes and interfaces
+├── autoload/
+├── core/
 ├── entities/
-│   ├── enemies/       # Basic, Fast, Tank
-│   ├── towers/        # Basic, Sniper, AOE
+│   ├── enemies/
+│   ├── towers/
 │   └── projectiles/
-├── systems/           # Spawner, Damage zones
+├── systems/
 ├── ui/
-└── scenes/            # Includes signal connections
+└── scenes/
 ```
 
 ---
 
-# Running the demo game
+## Running the Demo
 
-1. Open in **Godot 4.2+**
-2. Run `src/scenes/main_menu.tscn`
+### 1. Run the Game
 
----
+Open the project in **Godot 4.2+** and run:
 
-# Running GDShrapt CLI on this project
+```
+src/scenes/main_menu.tscn
+```
 
-Analyze everything:
+### 2. Run GDShrapt CLI
+
+From the project root:
 
 ```bash
 gdshrapt analyze .
+gdshrapt rename take_damage take_damage_renamed --diff
 ```
 
-Check CI health:
+Apply only safe edits:
 
 ```bash
-gdshrapt check .
-```
-
-Find dead code:
-
-```bash
-gdshrapt dead-code .
-```
-
-Type coverage:
-
-```bash
-gdshrapt type-coverage .
-```
-
-Dependency graph:
-
-```bash
-gdshrapt deps .
+gdshrapt rename take_damage take_damage_renamed --apply
 ```
 
 ---
 
-# Why this matters
+## License
 
-Godot’s built-in tooling cannot:
-
-- rename across scenes safely
-- distinguish typed vs duck-typed calls
-- propagate refactors through signals
-- provide confidence levels
-
-GDShrapt adds **language-level refactoring safety** to GDScript.
-
----
-
-# License
-
-MIT
+MIT License
