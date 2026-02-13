@@ -1,8 +1,6 @@
 <!-- Logo -->
 <p align="center">
   <img src="./docs/logo.png" alt="GDShrapt logo" width="128" />
-
-<!-- The logo file is expected to be provided in the repository -->
 </p>
 
 # GDShrapt Tower Defence Demo
@@ -10,6 +8,44 @@
 A demonstration Tower Defence game project for [GDShrapt](https://github.com/elamaunt/GDShrapt) — a semantic analysis and refactoring platform for GDScript.
 
 This repository is intentionally designed to showcase **safe project‑wide rename with confidence levels** and other static analysis capabilities on a realistic Godot codebase.
+
+---
+
+## Install GDShrapt CLI (Alpha)
+
+Install the CLI as a global .NET tool:
+
+```bash
+dotnet tool install -g GDShrapt.CLI --version 6.0.0-alpha.1
+```
+
+Verify installation:
+
+```bash
+gdshrapt --version
+```
+
+---
+
+## Run GDShrapt on This Demo
+
+From the repository root:
+
+```bash
+gdshrapt analyze .
+```
+
+Preview safe project‑wide rename:
+
+```bash
+gdshrapt rename take_damage take_damage_renamed --diff
+```
+
+Apply only strict (provably safe) edits:
+
+```bash
+gdshrapt rename take_damage take_damage_renamed --apply
+```
 
 ---
 
@@ -35,7 +71,7 @@ This project is used to demonstrate:
 ## Example CLI Output
 
 ```bash
-gdshrapt rename take_damage take_damage_renamed -p ./GDShrapt-Demo --diff
+gdshrapt rename take_damage take_damage_renamed --diff
 ```
 
 ![CLI Rename Output](docs/rename-output.png)
@@ -114,29 +150,12 @@ src/
 
 ---
 
-## Running the Demo
-
-### 1. Run the Game
+## Running the Game
 
 Open the project in **Godot 4.2+** and run:
 
 ```
 src/scenes/main_menu.tscn
-```
-
-### 2. Run GDShrapt CLI
-
-From the project root:
-
-```bash
-gdshrapt analyze .
-gdshrapt rename take_damage take_damage_renamed --diff
-```
-
-Apply only safe edits:
-
-```bash
-gdshrapt rename take_damage take_damage_renamed --apply
 ```
 
 ---
