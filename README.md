@@ -282,9 +282,7 @@ Collision pairs:
 
 If you prefer a screenshot instead of the long text block above, keep an image here:
 
-```md
 ![CLI Rename Output](docs/rename-output.png)
-```
 
 ---
 
