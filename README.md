@@ -39,13 +39,13 @@ This project is used to demonstrate:
 Install the CLI as a global .NET tool:
 
 ```bash
-dotnet tool install -g GDShrapt.CLI --version 6.0.0-alpha.1
+dotnet tool install -g GDShrapt.CLI --version 6.0.0-alpha.3
 ```
 
 To update later:
 
 ```bash
-dotnet tool update -g GDShrapt.CLI --version 6.0.0-alpha.1
+dotnet tool update -g GDShrapt.CLI --version 6.0.0-alpha.3
 ```
 
 Verify installation:
